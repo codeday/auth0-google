@@ -1,4 +1,4 @@
-FROM node as builder
+FROM node:14.8 as builder
 WORKDIR /app
 COPY ./package.json ./yarn.lock /app/
 RUN yarn install
@@ -7,7 +7,7 @@ COPY ./ /app
 
 RUN yarn run build
 
-FROM node:slim as runtime
+FROM node:14.8-slim as runtime
 
 WORKDIR /app
 ENV NODE_ENV=production
