@@ -36,7 +36,8 @@ async function indexPage(req: Request, res: Response): Promise<void> {
       <p><a href="${redirectUrl}">Click here if you're not redirected within 5 seconds.</a></p>
       <p>
         Note: some desktop apps require you to enter your Google password directly. This isn't synchronized with your
-        CodeDay account, you must <a href="/pass">click here to set it.</a> (Most people don't need to do this.)
+        CodeDay account, you must <a href="/pass" target="_blank">click here to set it.</a>
+        (Most people don't need to do this.)
       </p>
     </div>
   </body>
