@@ -38,6 +38,18 @@ export async function allUsers(): Promise<googleSchemas.Schema$User[]> {
   return results;
 }
 
+function emailByUsername(username: string): string {
+  return `${username}@${config.google.domain}`;
+}
+
+export async function fetchUser(username: string): Promise<googleSchemas.Schema$User | null> {
+  try {
+    return <googleSchemas.Schema$User>(await directoryApi.users.get({ userKey: emailByUsername(username) }));
+  } catch (_) {
+    return null;
+  }
+}
+
 export async function createOrUpdateUser(
   username: string,
   givenName: string,
@@ -46,7 +58,7 @@ export async function createOrUpdateUser(
   pronoun: string,
   title: string,
 ): Promise<void> {
-  const email = `${username}@${config.google.domain}`;
+  const email = emailByUsername(username);
 
   const profileInformation: googleSchemas.Schema$User = {
     name: {
@@ -69,7 +81,7 @@ export async function createOrUpdateUser(
     ],
   };
 
-  const existingUser = await directoryApi.users.get({ userKey: email });
+  const existingUser = fetchUser(username);
   if (existingUser) {
     await directoryApi.users.update({
       userKey: email,
