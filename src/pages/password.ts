@@ -25,8 +25,12 @@ async function showChangePasswordPage(req: Request, res: Response): Promise<void
 }
 
 async function doChangePassword(req: Request, res: Response): Promise<void> {
-  await changeUserPassword(<string>req.user, req.body.password);
-  res.send(changePasswordPage(req, 'Your Google account password was updated.'));
+  try {
+    await changeUserPassword(<string>req.user, req.body.password);
+    res.send(changePasswordPage(req, 'Your Google account password was updated.'));
+  } catch (err) {
+    res.send(changePasswordPage(req, err));
+  }
 }
 
 export default function registerPages(app: Express): void {
