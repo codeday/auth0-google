@@ -81,7 +81,7 @@ export async function createOrUpdateUser(
     ],
   };
 
-  const existingUser = fetchUser(username);
+  const existingUser = await fetchUser(username);
   if (existingUser) {
     await directoryApi.users.update({
       userKey: email,
