@@ -69,7 +69,7 @@ export async function createOrUpdateUser(
       {
         primary: true,
         type: 'main',
-        value: phone,
+        value: phone || '+18886077763',
       },
     ],
     organizations: [

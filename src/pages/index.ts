@@ -15,14 +15,19 @@ async function indexPage(req: Request, res: Response): Promise<void> {
   );
   const redirectUrl = `https://${config.auth0.domain}/continue?state=${state}`;
 
-  await createOrUpdateUser(
-    user.username,
-    user.given_name,
-    user.family_name,
-    user.user_metadata.phone_number,
-    user.user_metadata.pronoun,
-    user.user_metadata.title,
-  );
+  try {
+    await createOrUpdateUser(
+      user.username,
+      user.given_name,
+      user.family_name,
+      user.user_metadata.phone_number,
+      user.user_metadata.pronoun,
+      user.user_metadata.title,
+    );
+  } catch (err) {
+    res.send(err.toString());
+    return;
+  }
 
   res.send(`
   <html lang="en">
