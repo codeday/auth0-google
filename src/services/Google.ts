@@ -20,6 +20,7 @@ export const directoryApi = google.admin({ version: 'directory_v1', auth });
 export async function allUsers(): Promise<googleSchemas.Schema$User[]> {
   let nextPageToken: string | undefined;
   const results = [];
+  console.log(`Fetching users...`);
   do {
     // eslint-disable-next-line no-await-in-loop
     const { data } = await directoryApi.users.list({
@@ -33,6 +34,7 @@ export async function allUsers(): Promise<googleSchemas.Schema$User[]> {
     if (Array.isArray(data.users)) {
       results.push(...<googleSchemas.Schema$User[]>data.users);
     }
+    console.log(`... still fetching users (${results.length}, ${nextPageToken})`);
   } while (typeof nextPageToken !== 'undefined');
 
   return results;
@@ -81,13 +83,16 @@ export async function createOrUpdateUser(
     ],
   };
 
+  console.log(`Looking for existing user ${username}...`);
   const existingUser = await fetchUser(username);
   if (existingUser) {
+    console.log(`... user found, updating...`);
     await directoryApi.users.update({
       userKey: email,
       requestBody: profileInformation,
     });
   } else {
+    console.log(`... user not found, creating...`);
     await directoryApi.users.insert({
       requestBody: {
         primaryEmail: email,
